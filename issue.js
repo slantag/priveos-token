@@ -24,13 +24,14 @@
   * Employee Pool:
   * 100% Unallocated
   */
-
+const fs = require('fs')
 const Eos = require('eosjs')
 // const httpEndpoint = 'https://proxy.eosnode.tools'
 // const chainId = 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906'
 const httpEndpoint = "http://127.0.0.1:8888"
 const chainId = "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f"
-const keyProvider = ["5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3"]
+const secret = fs.readFileSync('key.txt', {encoding: 'utf8'})
+const keyProvider = [secret]
 
 const eos = Eos({httpEndpoint, chainId, keyProvider})
   
@@ -47,6 +48,14 @@ const accounts = {
   'angelo': ['angelooooool', 10],
   'kyle': ['earnedreward', 4],
 }
+
+const msig_accounts = [
+  '1bizauhilkat',
+  'familyv12345',
+  'singasong115',
+  'techradar123',
+  'angelooooool',
+]
 
 actions = []
 
@@ -179,28 +188,21 @@ function updateauth(account, permission, auth) {
   })
 }
 
+function perm(name) {
+  return {
+    "permission": {
+      "actor": name,
+      "permission":"active",
+    },
+    "weight":1,
+  }
+}
+
 function set_multisig() {
   auth = { 
     "threshold": 3, 
-    "keys": [ 
-      { 
-        "key": "EOS5V2Wfv9UqiMJ8bJ9kFcHADdhGEweN8MFxTkLAEr6kSb76eGvE6", // michael 
-        "weight": 1 
-      }, {
-        "key": "EOS6vLHmcPeZFZ5S3aGWHSva9QrwDGuQHfh7XFAqMmpYmCsniSF6c", // marcel 
-        "weight": 1         
-      }, {
-        "key": "EOS8JJMsLkLqzmjekmhxxxNYaXdpW8kGXZmUgGCuu8o9aaB7nU1fG", // tassia
-        "weight": 1
-      }, {
-        "key": "EOS539T67uddadhEUR6moj8g3uNFVzxS4DTX6sXjm3kfa4DaRuTP8", // fabian
-        "weight": 1
-      }, {
-        "key": "EOS8ermJB8tdXrJCFgjstM6fM7UPJfDs3FcwVy6AnbuPD1fEStDUa", // angelo
-        "weight": 1
-      }
-    ], 
-    "accounts": [], 
+    "keys": [], 
+    "accounts": msig_accounts.map(x => perm(x)), 
     "waits": [] 
   }
   
