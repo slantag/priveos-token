@@ -1,0 +1,9 @@
+{
+  "name": "priveos-token",
+  "version": "1.0.0",
+  "main": "issue.js",
+  "license": "MIT",
+  "dependencies": {
+    "eosjs": "16"
+  }
+}
