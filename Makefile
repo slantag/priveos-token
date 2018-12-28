@@ -29,4 +29,7 @@ issue:
 transfer:
 	cleos push action priveostoken transfer '["slantagpurse", "priveosrules", "1000.0000 PRIVEOS", ""]' -p slantagpurse
 	
+withdraw:
+	cleos push action priveosrules withdraw '["angelooooool", "1.0000 PRIVEOS", ""]' -p angelooooool
+
 	

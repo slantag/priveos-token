@@ -198,21 +198,40 @@ function perm(name) {
   }
 }
 
-function set_multisig() {
-  auth = { 
+function eosio_code(name) {
+  return {
+    "permission": {
+      "actor": name,
+      "permission":"eosio.code",
+    },
+    "weight":3,
+  }
+}
+
+function get_auth(name, add_eosio_code) {
+  let accounts = msig_accounts.map(x => perm(x))
+  if(add_eosio_code) {
+      accounts = accounts.concat(eosio_code(name))
+  }
+  return { 
     "threshold": 3, 
     "keys": [], 
-    "accounts": msig_accounts.map(x => perm(x)), 
+    "accounts": accounts, 
     "waits": [] 
   }
-  
-  updateauth(priveos_contract, "active", auth)
-  updateauth(priveos_contract, "owner", auth)
-  updateauth(slantagwallet, "active", auth)
-  updateauth(slantagwallet, "owner", auth)
-  updateauth(token_contract, "active", auth)
-  updateauth(token_contract, "owner", auth)
-  
+}
+
+function add_updateauth(name, permission, add_eosio_code=false) {
+  updateauth(name, permission, get_auth(name, add_eosio_code))
+}
+
+function set_multisig() {
+  add_updateauth(priveos_contract, "active", true)
+  add_updateauth(priveos_contract, "owner")
+  add_updateauth(token_contract, "active", true)
+  add_updateauth(token_contract, "owner")
+  add_updateauth(slantagwallet, "active")
+  add_updateauth(slantagwallet, "owner")
 }
 async function execute_transaction() {
   const res = await eos.transaction({actions: actions})
