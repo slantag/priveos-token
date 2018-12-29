@@ -102,8 +102,8 @@ function token_action(name, data) {
 
 
 function add_founder(name, tokens) {
-  transfer(slantagwallet, name, tokens/2, 'Founder Shares')
-  transfer(slantagwallet, priveos_contract, tokens/2, 'Founder Shares')
+  transfer(slantagwallet, name, tokens/2, 'Founder Tokens')
+  transfer(slantagwallet, priveos_contract, tokens/2, 'Founder Tokens')
   lock(name, tokens/2)
 }
 
